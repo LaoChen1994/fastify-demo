@@ -6,6 +6,7 @@ import {
   printInventorySchema
 } from "./schema"
 
+
 export default function inventoryHandler(server, options, next) {
   server.get(
     "/inventory",

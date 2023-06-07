@@ -16,6 +16,7 @@ export default (server, options, next) => {
       res.send(products)
     }
   )
+
   server.delete(
     "/products/:id",
     { schema: deleteProductSchema, preValidation: [server.authenticate] },
