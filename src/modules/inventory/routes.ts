@@ -3,7 +3,6 @@ import {
   postInventorySchema,
   listInventorySchema,
   deleteInventorySchema,
-  printInventorySchema
 } from "./schema"
 
 

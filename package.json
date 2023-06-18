@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "dev": "nodemon --watch './src/**/*.ts' --exec ts-node ./src/index.ts",
-    "build": "tsc",
+    "build": "NODE_ENV=production tsc",
     "test": "NODE_ENV=test jest --coverage",
     "test:watch": "npm run test -- --watchAll"
   },
@@ -18,20 +18,21 @@
     "fastify": "^2.8.0",
     "fastify-jwt": "^1.1.0",
     "fastify-oas": "^2.3.3",
-    "mssql": "^5.1.0",
+    "mysql2": "^3.3.5",
     "pino-pretty": "^3.2.2",
     "reflect-metadata": "^0.1.13",
+    "sequelize": "^6.32.0",
     "sql.js": "^1.0.0",
-    "typeorm": "^0.2.19"
+    "yaml": "^2.3.1"
   },
   "devDependencies": {
     "@types/cors": "^2.8.6",
     "@types/jest": "^24.0.18",
-    "@types/node": "^12.7.5",
+    "@types/node": "^20.3.1",
     "jest": "^24.9.0",
     "nodemon": "^1.19.2",
     "ts-jest": "^24.1.0",
-    "ts-node": "^8.4.1",
-    "typescript": "^3.6.3"
+    "ts-node": "^10.9.1",
+    "typescript": "^5.1.3"
   }
 }
