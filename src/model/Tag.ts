@@ -4,17 +4,7 @@ import {
     InferAttributes,
     InferCreationAttributes,
     ForeignKey,
-    BelongsToMany,
-    BelongsToManyOptions,
     BelongsToManyGetAssociationsMixin,
-    HasManyAddAssociationMixin,
-    HasManyAddAssociationsMixin,
-    HasManySetAssociationsMixin,
-    HasManyRemoveAssociationMixin,
-    HasManyHasAssociationMixin,
-    HasManyHasAssociationsMixin,
-    HasManyCountAssociationsMixin,
-    HasManyCreateAssociationMixin,
     BelongsToManyAddAssociationMixin,
     BelongsToManySetAssociationsMixin,
     BelongsToSetAssociationMixin,
@@ -22,7 +12,7 @@ import {
     BelongsToManyRemoveAssociationsMixin,
     BelongsToManyHasAssociationMixin,
     BelongsToManyHasAssociationsMixin,
-    BelongsToManyCountAssociationsMixin, BelongsToManyCreateAssociationMixin, Sequelize, DataTypes
+    BelongsToManyCountAssociationsMixin, BelongsToManyCreateAssociationMixin, Sequelize, DataTypes, Association
 } from 'sequelize'
 import User from "./User";
 import Article from "./Article";
@@ -39,7 +29,7 @@ export default class Tag extends Model<
     declare deletedAt: CreationOptional<Date>
 
     declare ownerId: ForeignKey<User['id']>;
-    declare owner: NonNullable<User>
+    declare owner: NonNullable<User[]>
 
     declare articles: NonNullable<Article[]>
     declare addArticle: BelongsToManyAddAssociationMixin<Article, number>;
@@ -52,6 +42,11 @@ export default class Tag extends Model<
     declare hasArticles: BelongsToManyHasAssociationsMixin<Article, number>;
     declare countArticles: BelongsToManyCountAssociationsMixin;
     declare createArticle: BelongsToManyCreateAssociationMixin<Article>
+
+    declare static associations: {
+        owner: Association<User, Tag>
+        articles: Association<Article, Tag>
+    }
 }
 
 export const init = (sequelize: Sequelize) => {
@@ -75,5 +70,15 @@ export const init = (sequelize: Sequelize) => {
     }, {
         sequelize,
         tableName: 'tag'
+    })
+}
+
+export const buildAssociation = () => {
+    Tag.belongsToMany(User, {
+        through: 'UserTag'
+    })
+
+    Tag.belongsToMany(Article, {
+        through: 'ArticleTag'
     })
 }

@@ -12,7 +12,7 @@ import {
     HasManyRemoveAssociationMixin,
     HasManyHasAssociationMixin,
     HasManyHasAssociationsMixin,
-    HasManyCountAssociationsMixin, HasManyCreateAssociationMixin,
+    HasManyCountAssociationsMixin, HasManyCreateAssociationMixin, Association,
 } from 'sequelize'
 
 import Article from "./Article";
@@ -61,6 +61,11 @@ export default class User extends Model<
     declare hasTags: HasManyHasAssociationsMixin<Tag, number>;
     declare countTags: HasManyCountAssociationsMixin;
     declare createTag: HasManyCreateAssociationMixin<Tag, 'ownerId'>
+
+    declare static associations: {
+        articles: Association<Article, User>
+        tags: Association<Tag, User>
+    }
 }
 
 export const init = (sequelize: Sequelize) => {
@@ -87,6 +92,18 @@ export const init = (sequelize: Sequelize) => {
         deletedAt: DataTypes.DATE
     }, {
         tableName: 'users',
-        sequelize
+        sequelize,
     })
+}
+
+export const buildAssociation = () => {
+    User.hasMany(Article, {
+        sourceKey: 'id',
+        foreignKey: 'ownerId',
+        as: 'articles'
+    })
+
+    User.belongsToMany(Tag, {
+        through: 'UserTag'
+    });
 }

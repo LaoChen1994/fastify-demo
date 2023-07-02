@@ -1,4 +1,6 @@
 import fastify from "fastify"
+import cors from "@fastify/cors"
+import oas from 'fastify-oas'
 
 import auth from "./plugins/auth"
 import db from "./plugins/db-sequelize"
@@ -6,10 +8,12 @@ import healthHandler from "./modules/health/routes"
 import productsHandler from "./modules/products/routes"
 import inventoryHandler from "./modules/inventory/routes"
 
-function createServer() {
-  const server = fastify({ logger: { prettyPrint: true } })
 
-  server.register(require("fastify-oas"), {
+function createServer() {
+  const server = fastify({ logger: true })
+
+  server.register(cors);
+  server.register(oas, {
     routePrefix: "/docs",
     exposeRoute: true,
     swagger: {
@@ -49,15 +53,6 @@ function createServer() {
     req.log.error(error.toString())
     res.send({ error })
   })
-
-  /*
-  generate temporary token to be used in app
-
-  server.ready(() => {
-    const token = server.jwt.sign({ user_id: 'swr_user_id' })
-    console.log(token)
-  })
-  */
 
   return server
 }

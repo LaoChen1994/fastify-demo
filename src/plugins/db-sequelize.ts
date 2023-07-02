@@ -3,14 +3,12 @@ import {Sequelize} from 'sequelize';
 import {parse} from 'yaml';
 import Fs from 'fs'
 import {resolve} from 'path'
-import * as console from "console";
 import * as Models from '../model'
 
 const isProduction = process.env.NODE_ENV === 'production';
 
 export default fp(async (server) => {
     try {
-        console.log('isProd =>', isProduction)
         const configPath = isProduction ? resolve(__dirname, '../../../config.yaml') : resolve(__dirname, '../../config.yaml');
 
         const config = parse(Fs.readFileSync(configPath, 'utf8'));
@@ -23,19 +21,35 @@ export default fp(async (server) => {
 
         await sequelize.authenticate();
 
+        const inits = [];
+        const buildAssociations = [];
+
         for (const modelName in Models) {
             const model = Models[modelName];
 
-            if (model.init) {
-                model.init(sequelize)
+            if (!model) {
+                continue;
             }
 
-            if (model.default && model.default.sync) {
-                await model.default.sync({alter: true})
+            const { init, buildAssociation } = model
+
+            init && inits.push(init)
+            buildAssociation && buildAssociations.push(buildAssociation)
+        }
+
+        for (const init of inits) {
+            if (typeof init === 'function') {
+                init(sequelize)
             }
         }
 
-        console.log('Connection has been established successfully.');
+        for (const buildAssociation of buildAssociations) {
+            if (typeof buildAssociation === "function") {
+                buildAssociation()
+            }
+        }
+
+        await sequelize.sync()
 
         server.decorate("db", sequelize)
     } catch (e) {

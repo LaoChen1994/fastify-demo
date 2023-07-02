@@ -1,7 +1,8 @@
 import fp from "fastify-plugin"
+import fastifyJwt from "@fastify/jwt"
 
-export default fp((server, opts, next) => {
-  server.register(require("fastify-jwt"), {
+export default fp(async (server, opts, next) => {
+  server.register(fastifyJwt, {
     secret: "pd-server-test"
   })
 
@@ -14,4 +15,6 @@ export default fp((server, opts, next) => {
   })
 
   next()
+}, {
+  name: 'pd-auth'
 })

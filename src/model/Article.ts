@@ -6,15 +6,6 @@ import {
     ForeignKey,
     DataTypes,
     Sequelize,
-    HasManyGetAssociationsMixin,
-    HasManyAddAssociationMixin,
-    HasManyAddAssociationsMixin,
-    HasManySetAssociationsMixin,
-    HasManyRemoveAssociationMixin,
-    HasManyHasAssociationMixin,
-    HasManyHasAssociationsMixin,
-    HasManyCountAssociationsMixin,
-    HasManyCreateAssociationMixin,
     BelongsToManyGetAssociationsMixin,
     BelongsToManyAddAssociationMixin,
     BelongsToManyAddAssociationsMixin,
@@ -22,7 +13,10 @@ import {
     BelongsToManyRemoveAssociationMixin,
     BelongsToManyRemoveAssociationsMixin,
     BelongsToManyHasAssociationMixin,
-    BelongsToManyHasAssociationsMixin, BelongsToManyCountAssociationsMixin, BelongsToManyCreateAssociationMixin,
+    BelongsToManyHasAssociationsMixin,
+    BelongsToManyCountAssociationsMixin,
+    BelongsToManyCreateAssociationMixin,
+    Association,
 } from 'sequelize'
 
 import User from './User'
@@ -55,10 +49,14 @@ export default class Article extends Model<
     declare hasTags: BelongsToManyHasAssociationsMixin<Tag, number>;
     declare countTags: BelongsToManyCountAssociationsMixin;
     declare createTag: BelongsToManyCreateAssociationMixin<Tag>
+
+    declare static associations: {
+        tags: Association<Article, Tag>
+    }
 }
 
 export const init = (sequelize: Sequelize) => {
-    Article.init({
+    const article = Article.init({
         id: {
             type: DataTypes.INTEGER.UNSIGNED,
             primaryKey: true,
@@ -83,5 +81,11 @@ export const init = (sequelize: Sequelize) => {
     }, {
         sequelize,
         tableName: 'articles',
+    })
+}
+
+export const buildAssociation = () => {
+    Article.belongsToMany(Tag, {
+        through: 'ArticleTag'
     })
 }

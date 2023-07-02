@@ -16,8 +16,8 @@
     "paths": {
       "*": ["node_modules/*"]
     },
-
     "noImplicitAny": false,
     "lib": ["es6"]
-  }
+  },
+  "include": ["@types/node"],
 }

@@ -1,6 +1,6 @@
 db:
   username: root
-  password: cyx19941116
+  password:
   database: pd_cms
   port: 3306
   host: localhost
