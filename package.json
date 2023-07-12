@@ -23,6 +23,7 @@
     "pino-pretty": "^3.2.2",
     "reflect-metadata": "^0.1.13",
     "sequelize": "^6.32.0",
+    "sequelize-typescript": "^2.1.5",
     "sql.js": "^1.0.0",
     "yaml": "^2.3.1"
   },

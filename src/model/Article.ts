@@ -23,6 +23,7 @@ import User from './User'
 import Tag from './Tag'
 
 
+
 export default class Article extends Model<
     InferAttributes<Article, {omit: 'owner' | 'tags'}>,
     InferCreationAttributes<Article, {omit: 'owner' | 'tags'}>
@@ -49,6 +50,7 @@ export default class Article extends Model<
     declare hasTags: BelongsToManyHasAssociationsMixin<Tag, number>;
     declare countTags: BelongsToManyCountAssociationsMixin;
     declare createTag: BelongsToManyCreateAssociationMixin<Tag>
+
 
     declare static associations: {
         tags: Association<Article, Tag>
