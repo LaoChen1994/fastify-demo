@@ -16,6 +16,7 @@ import {
 } from 'sequelize'
 import User from "./User";
 import Article from "./Article";
+import { Noop, ModelInit } from '../typings';
 
 export default class Tag extends Model<
     InferAttributes<Tag, { omit: 'owner' | 'articles'}>,
@@ -49,7 +50,7 @@ export default class Tag extends Model<
     }
 }
 
-export const init = (sequelize: Sequelize) => {
+export const init: ModelInit = (sequelize: Sequelize) => {
     Tag.init({
         id: {
           type: DataTypes.INTEGER.UNSIGNED,
@@ -73,7 +74,7 @@ export const init = (sequelize: Sequelize) => {
     })
 }
 
-export const buildAssociation = () => {
+export const buildAssociation: Noop = () => {
     Tag.belongsToMany(User, {
         through: 'UserTag'
     })

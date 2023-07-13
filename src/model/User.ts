@@ -12,8 +12,11 @@ import {
     HasManyRemoveAssociationMixin,
     HasManyHasAssociationMixin,
     HasManyHasAssociationsMixin,
-    HasManyCountAssociationsMixin, HasManyCreateAssociationMixin, Association,
+    HasManyCountAssociationsMixin, 
+    HasManyCreateAssociationMixin, 
+    Association,
 } from 'sequelize'
+import { ModelInit, Noop } from '../typings';
 
 import Article from "./Article";
 import Tag from "./Tag";
@@ -68,7 +71,7 @@ export default class User extends Model<
     }
 }
 
-export const init = (sequelize: Sequelize) => {
+export const init: ModelInit = (sequelize: Sequelize) => {
     User.init({
         id: {
             type: DataTypes.INTEGER.UNSIGNED,
@@ -96,7 +99,7 @@ export const init = (sequelize: Sequelize) => {
     })
 }
 
-export const buildAssociation = () => {
+export const buildAssociation: Noop = () => {
     User.hasMany(Article, {
         sourceKey: 'id',
         foreignKey: 'ownerId',

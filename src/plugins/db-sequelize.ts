@@ -4,6 +4,7 @@ import {parse} from 'yaml';
 import Fs from 'fs'
 import {resolve} from 'path'
 import * as Models from '../model'
+import { ModelInit, Noop } from '../typings';
 
 const isProduction = process.env.NODE_ENV === 'production';
 
@@ -21,8 +22,8 @@ export default fp(async (server) => {
 
         await sequelize.authenticate();
 
-        const inits = [];
-        const buildAssociations = [];
+        const inits: ModelInit[] = [];
+        const buildAssociations: Noop[] = [];
 
         for (const modelName in Models) {
             const model = Models[modelName];
